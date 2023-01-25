@@ -19,16 +19,16 @@ export function moveCounterClockwise() {
   return { type: MOVE_COUNTERCLOCKWISE };
 }
 
-export function selectAnswer() {
-  return { type: SET_SELECTED_ANSWER };
+export function selectAnswer(answer) {
+  return { type: SET_SELECTED_ANSWER, payload: answer };
 }
 
 export function setMessage() {
   return { type: SET_INFO_MESSAGE };
 }
 
-export function setQuiz() {
-  return { type: SET_QUIZ_INTO_STATE };
+export function setQuiz(quiz) {
+  return { type: SET_QUIZ_INTO_STATE, payload: quiz };
 }
 
 export function inputChange() {
@@ -49,11 +49,11 @@ export function fetchQuiz() {
     axios
       .get("http://localhost:9000/api/quiz/next")
       .then((res) => {
-        dispatch(dispatch(setQuiz(res.data)));
+        dispatch(setQuiz(res.data));
       })
       .catch((err) => {
         console.log(err);
-      });
+      }, []);
   };
 }
 export function postAnswer() {
@@ -62,6 +62,7 @@ export function postAnswer() {
     // - Dispatch an action to reset the selected answer state
     // - Dispatch an action to set the server message to state
     // - Dispatch the fetching of the next quiz
+    selectAnswer(null);
   };
 }
 export function postQuiz() {

@@ -4,12 +4,26 @@ import * as actionCreators from "../state/action-creators";
 import { dispatch } from "react";
 
 export function Form(props) {
-  const { inputChange } = props;
+  const { inputChange, newQuestion, newTrueAnswer, newFalseAnswer, postQuiz } =
+    props;
+
   const onChange = (evt) => {
-    inputChange(evt.target.value);
+    inputChange(evt.target.id, evt.target.value);
   };
 
-  const onSubmit = (evt) => {};
+  const onSubmit = (evt) => {
+    evt.preventDefault();
+    const payload = {
+      question_text: newQuestion,
+      true_answer_text: newTrueAnswer,
+      false_answer_text: newFalseAnswer,
+    };
+    postQuiz(payload);
+  };
+  const disabled =
+    newQuestion.trim().length > 0 &&
+    newTrueAnswer.trim().length > 0 &&
+    newFalseAnswer.trim().length > 0;
 
   return (
     <form id="form" onSubmit={onSubmit}>
@@ -32,9 +46,18 @@ export function Form(props) {
         id="newFalseAnswer"
         placeholder="Enter false answer"
       />
-      <button id="submitNewQuizBtn">Submit new quiz</button>
+      <button id="submitNewQuizBtn" disabled={!disabled}>
+        Submit new quiz
+      </button>
     </form>
   );
 }
-
-export default connect((st) => st, actionCreators)(Form);
+const mapStateToProps = (state) => {
+  return {
+    ...state,
+    newQuestion: state.form.newQuestion,
+    newTrueAnswer: state.form.newTrueAnswer,
+    newFalseAnswer: state.form.newFalseAnswer,
+  };
+};
+export default connect(mapStateToProps, actionCreators)(Form);

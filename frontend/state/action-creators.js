@@ -6,6 +6,7 @@ import {
   SET_INFO_MESSAGE,
   SET_QUIZ_INTO_STATE,
   SET_SELECTED_ANSWER,
+  NEW_ANSWER,
 } from "./action-types";
 
 import axios from "axios";
@@ -23,16 +24,20 @@ export function selectAnswer(answer) {
   return { type: SET_SELECTED_ANSWER, payload: answer };
 }
 
-export function setMessage() {
-  return { type: SET_INFO_MESSAGE };
+export function setMessage(message) {
+  return { type: SET_INFO_MESSAGE, payload: message };
 }
 
 export function setQuiz(quiz) {
   return { type: SET_QUIZ_INTO_STATE, payload: quiz };
 }
 
-export function inputChange() {
-  return { type: INPUT_CHANGE };
+// export function inputChange(change) {
+//   return { type: INPUT_CHANGE, payload: change };
+// }
+
+export function inputChange(name, payload) {
+  return { type: INPUT_CHANGE, name, payload };
 }
 
 export function resetForm() {
@@ -42,9 +47,6 @@ export function resetForm() {
 // ❗ Async action creators
 export function fetchQuiz() {
   return function (dispatch) {
-    // First, dispatch an action to reset the quiz state (so the "Loading next quiz..." message can display)
-    // On successful GET:
-    // - Dispatch an action to send the obtained quiz to its state
     dispatch(setQuiz(null));
     axios
       .get("http://localhost:9000/api/quiz/next")
@@ -65,11 +67,15 @@ export function postAnswer() {
     selectAnswer(null);
   };
 }
-export function postQuiz() {
+export function postQuiz(payload) {
   return function (dispatch) {
-    // On successful POST:
-    // - Dispatch the correct message to the the appropriate state
-    // - Dispatch the resetting of the form
+    axios.post("http://localhost:9000/api/quiz/new", payload).then((res) => {
+      console.log(res.data);
+      dispatch(
+        setMessage(`Congrats: "${res.data.question}" is a great question!`)
+      );
+      dispatch(resetForm(true));
+    });
   };
 }
 // ❗ On promise rejections, use log statements or breakpoints, and put an appropriate error message in state

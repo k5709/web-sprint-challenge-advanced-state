@@ -3,6 +3,7 @@ import { combineReducers } from "redux";
 import {
   INPUT_CHANGE,
   RESET_FORM,
+  SET_INFO_MESSAGE,
   SET_QUIZ_INTO_STATE,
   SET_SELECTED_ANSWER,
 } from "./action-types";
@@ -41,6 +42,10 @@ function selectedAnswer(state = initialSelectedAnswerState, action) {
 
 const initialMessageState = "";
 function infoMessage(state = initialMessageState, action) {
+  switch (action.type) {
+    case SET_INFO_MESSAGE:
+      return action.payload;
+  }
   return state;
 }
 
@@ -52,7 +57,10 @@ const initialFormState = {
 function form(state = initialFormState, action) {
   switch (action.type) {
     case INPUT_CHANGE:
-      return { ...state, ...action.payload };
+      return {
+        ...state,
+        [action.name]: action.payload,
+      };
     case RESET_FORM:
       return initialFormState;
   }

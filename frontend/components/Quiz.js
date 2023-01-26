@@ -8,15 +8,15 @@ function Quiz(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchQuiz());
+    dispatch(fetchQuiz(quiz));
   }, [null]);
 
   const onClickHandler = (number) => {
     dispatch(selectAnswer(quiz.answers[number].answer_id));
     setActive(number);
   };
-  console.log(selectedAnswer);
-  console.log(props);
+
+  console.log(props.quiz);
   return (
     <div id="wrapper">
       {
@@ -30,7 +30,7 @@ function Quiz(props) {
               <div className={`answer${active === 0 ? " selected" : ""} `}>
                 {quiz.answers &&
                   quiz.answers.map((answer, index) => (
-                    <div key={answer.id}>{quiz.answers[0].text}</div>
+                    <div key={index}>{quiz.answers[0].text}</div>
                   ))}
                 <button onClick={() => onClickHandler(0)}>
                   {active === 0 ? "SELECTED" : "select"}

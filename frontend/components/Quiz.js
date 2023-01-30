@@ -40,33 +40,30 @@ function Quiz(props) {
 
             <div id="quizAnswers">
               <div
+                //classname
                 className={`answer${
                   answerId === quiz.answers[0].answer_id ? " selected" : ""
                 } `}
               >
-                {quiz.answers &&
-                  quiz.answers.map((answer, index) => (
-                    <div key={index}>{index === 0 && quiz.answers[0].text}</div>
-                  ))}
+                {quiz.answers[0].text}
                 <button onClick={() => onClickHandler(0)}>
                   {answerId === quiz.answers[0].answer_id
                     ? " SELECTED"
                     : "Select"}
                 </button>
               </div>
-
               <div
+                //classname
                 className={`answer${
-                  answerId === quiz.answers[1].answer_id ? " selected" : ""
+                  selectedAnswer === quiz.answers[1].answer_id
+                    ? " selected"
+                    : ""
                 } `}
               >
-                {quiz.answers &&
-                  quiz.answers.map((answer, index) => (
-                    <div key={index}>{index === 0 && quiz.answers[1].text}</div>
-                  ))}
+                {quiz.answers[1].text}
                 <div>
                   <button onClick={() => onClickHandler(1)}>
-                    {answerId === quiz.answers[1].answer_id
+                    {selectedAnswer === quiz.answers[1].answer_id
                       ? " SELECTED"
                       : "Select"}
                   </button>

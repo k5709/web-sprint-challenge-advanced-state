@@ -47,10 +47,10 @@ export function resetForm() {
 // ❗ Async action creators
 export function fetchQuiz() {
   return function (dispatch) {
-    dispatch(setQuiz(null));
     axios
       .get("http://localhost:9000/api/quiz/next")
       .then((res) => {
+        dispatch(setQuiz(null));
         dispatch(setQuiz(res.data));
       })
       .catch((err) => {
@@ -58,23 +58,27 @@ export function fetchQuiz() {
       }, []);
   };
 }
-export function postAnswer() {
+export function postAnswer(payload) {
   return function (dispatch) {
     // On successful POST:
     // - Dispatch an action to reset the selected answer state
     // - Dispatch an action to set the server message to state
     // - Dispatch the fetching of the next quiz
-    selectAnswer(null);
+    axios.post("http://localhost:9000/api/quiz/answer", payload).then((res) => {
+      dispatch(fetchQuiz());
+      dispatch(selectAnswer(null));
+      dispatch(setMessage(res.data.message));
+    });
   };
 }
 export function postQuiz(payload) {
   return function (dispatch) {
     axios.post("http://localhost:9000/api/quiz/new", payload).then((res) => {
       console.log(res.data);
+      dispatch(resetForm(true));
       dispatch(
         setMessage(`Congrats: "${res.data.question}" is a great question!`)
       );
-      dispatch(resetForm(true));
     });
   };
 }

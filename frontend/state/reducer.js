@@ -12,10 +12,9 @@ const initialWheelState = 0;
 function wheel(state = initialWheelState, action) {
   switch (action.type) {
     case "MOVE_COUNTERCLOCKWISE":
-      return state === 0 ? 0 : state - 1;
+      return state === 0 ? 5 : state - 1;
     case "MOVE_CLOCKWISE":
-      return state === 5 ? 5 : state + 1;
-    // return { ...state, position: state.position + 1 };
+      return state === 5 ? 0 : state + 1;
   }
 
   return state;
@@ -25,7 +24,7 @@ const initialQuizState = null;
 function quiz(state = initialQuizState, action) {
   switch (action.type) {
     case SET_QUIZ_INTO_STATE:
-      return { ...action.payload };
+      return { ...state, ...action.payload };
   }
   return state;
 }
@@ -35,7 +34,7 @@ function selectedAnswer(state = initialSelectedAnswerState, action) {
   switch (action.type) {
     case SET_SELECTED_ANSWER:
       console.log("answer selected");
-      return { ...state, ...action.payload };
+      return action.payload;
   }
   return state;
 }
@@ -62,7 +61,12 @@ function form(state = initialFormState, action) {
         [action.name]: action.payload,
       };
     case RESET_FORM:
-      return initialFormState;
+      return {
+        ...state,
+        newQuestion: "",
+        newTrueAnswer: "",
+        newFalseAnswer: "",
+      };
   }
   return state;
 }
